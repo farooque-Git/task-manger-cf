@@ -73,7 +73,7 @@ function TaskModal({ task, isEditing, onClose }) {
               type="submit"
               className="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600"
             >
-              {isEditing ? "Update Task" : "Add Task"}
+              {isEditing ? "Update" : "Add Task"}
             </button>
           </div>
         </form>

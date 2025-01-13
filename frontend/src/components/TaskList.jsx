@@ -6,7 +6,7 @@ import {
   deleteTask,
   updateTask,
 } from "../redux/slices/taskSlice";
-import TaskModal from "./TaskModal"; // Import the TaskModal component
+import TaskModal from "./TaskModal";
 
 function TaskList() {
   const dispatch = useDispatch();
@@ -58,7 +58,7 @@ function TaskList() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto mt-6">
+    <div className="w-full p-20 mx-auto mt-[-2rem]">
       <div className="flex justify-between mb-4">
         <div className="w-full">
           <input
@@ -66,7 +66,7 @@ function TaskList() {
             placeholder="Search tasks..."
             value={searchInput}
             onChange={handleSearchChange}
-            className="w-full p-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border justify-center border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="w-1/3 flex justify-end">

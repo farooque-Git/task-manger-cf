@@ -1,5 +1,6 @@
-// src/redux/slices/taskSlice.js
 import { createSlice } from "@reduxjs/toolkit";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const initialState = {
   tasks: [],
@@ -13,6 +14,7 @@ const taskSlice = createSlice({
   reducers: {
     addTask: (state, action) => {
       state.tasks.push(action.payload);
+      toast.success("Task Added!");
     },
     updateTask: (state, action) => {
       const index = state.tasks.findIndex(
@@ -20,10 +22,12 @@ const taskSlice = createSlice({
       );
       if (index !== -1) {
         state.tasks[index] = action.payload;
+        toast.info("Task Status Updated!");
       }
     },
     deleteTask: (state, action) => {
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+      toast.error("Task Deleted!");
     },
     setSearchTerm: (state, action) => {
       state.searchTerm = action.payload;
@@ -36,4 +40,5 @@ const taskSlice = createSlice({
 
 export const { addTask, updateTask, deleteTask, setSearchTerm, setFilter } =
   taskSlice.actions;
+
 export default taskSlice.reducer;

@@ -22,7 +22,7 @@ const taskSlice = createSlice({
       );
       if (index !== -1) {
         state.tasks[index] = action.payload;
-        toast.info("Task Status Updated!");
+        toast.info("Task Updated!");
       }
     },
     deleteTask: (state, action) => {

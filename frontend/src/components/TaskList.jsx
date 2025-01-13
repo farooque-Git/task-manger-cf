@@ -1,4 +1,3 @@
-// src/components/TaskList.js
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,14 +6,16 @@ import {
   deleteTask,
   updateTask,
 } from "../redux/slices/taskSlice";
+import TaskModal from "./TaskModal"; // Import the TaskModal component
 
 function TaskList() {
   const dispatch = useDispatch();
   const { tasks, filter, searchTerm } = useSelector((state) => state.tasks);
 
-  // Local state to hold the search term temporarily
   const [searchInput, setSearchInput] = useState(searchTerm);
   const [debounceTimeout, setDebounceTimeout] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -26,8 +27,7 @@ function TaskList() {
 
     const newTimeout = setTimeout(() => {
       dispatch(setSearchTerm(value));
-    }, 500);
-    //debounce time
+    }, 500); // Debounce time
     setDebounceTimeout(newTimeout);
   };
 
@@ -46,6 +46,16 @@ function TaskList() {
       }
     };
   }, [debounceTimeout]);
+
+  const openEditModal = (task) => {
+    setEditingTask(task);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setEditingTask(null);
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto mt-6">
@@ -91,7 +101,7 @@ function TaskList() {
                 <td className="border-b px-4 py-2">{task.status}</td>
                 <td className="border-b px-4 py-2 flex space-x-2">
                   <button
-                    onClick={() => dispatch(updateTask(task))}
+                    onClick={() => openEditModal(task)}
                     className="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600"
                   >
                     Edit
@@ -114,6 +124,11 @@ function TaskList() {
           )}
         </tbody>
       </table>
+
+      {/* Task Modal */}
+      {isModalOpen && (
+        <TaskModal task={editingTask} isEditing={true} onClose={closeModal} />
+      )}
     </div>
   );
 }

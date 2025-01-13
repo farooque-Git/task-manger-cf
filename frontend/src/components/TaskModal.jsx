@@ -55,9 +55,7 @@ function TaskModal({ task, isEditing, onClose }) {
               onChange={(e) => setStatus(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
             >
-              <option value="Pending" >
-                Pending
-              </option>
+              <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
               <option value="Completed">Completed</option>
             </select>

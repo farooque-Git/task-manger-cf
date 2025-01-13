@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 function TaskTable({ tasks }) {
   return (
-    <table className="min-w-full table-auto">
+    <table className="min-w-full table-auto ">
       <thead>
         <tr className="bg-gray-100">
           <th className="py-2 px-4 text-left">Task ID</th>

@@ -14,7 +14,7 @@ const taskSlice = createSlice({
   reducers: {
     addTask: (state, action) => {
       state.tasks.push(action.payload);
-      toast.success("Task Added!");
+      toast.success("Task Added !");
     },
     updateTask: (state, action) => {
       const index = state.tasks.findIndex(
@@ -22,12 +22,12 @@ const taskSlice = createSlice({
       );
       if (index !== -1) {
         state.tasks[index] = action.payload;
-        toast.info("Task Updated!");
+        toast.info("Task Updated !");
       }
     },
     deleteTask: (state, action) => {
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
-      toast.error("Task Deleted!");
+      toast.error("Task Deleted !");
     },
     setSearchTerm: (state, action) => {
       state.searchTerm = action.payload;

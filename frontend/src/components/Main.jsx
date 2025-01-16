@@ -1,5 +1,4 @@
-// src/Main.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addTask, updateTask, deleteTask } from "../redux/slices/taskSlice";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,29 +6,53 @@ import "react-toastify/dist/ReactToastify.css";
 import TaskList from "./TaskList";
 import TaskModal from "./TaskModal";
 import { FaSun, FaMoon } from "react-icons/fa";
+import io from "socket.io-client";
+
+const socket = io("http://localhost:3000"); // socket URL servel URL
 
 function Main() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [tasks, setTasks] = useState([]);
   const [currentTask, setCurrentTask] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    socket.on("taskAdded", (task) => {
+      dispatch(addTask(task));
+    });
+
+    socket.on("taskUpdated", (updatedTask) => {
+      dispatch(updateTask(updatedTask));
+    });
+
+    socket.on("taskDeleted", (taskId) => {
+      dispatch(deleteTask(taskId));
+    });
+
+    return () => {
+      socket.off("taskAdded");
+      socket.off("taskUpdated");
+      socket.off("taskDeleted");
+    };
+  }, [dispatch]);
+
   const addTaskToList = (task) => {
     dispatch(addTask(task));
-    console.log("Toast - Task Added");
-    toast.success("Task Added!");
+
+    socket.emit("addTask", task);
   };
 
   const updateTaskInList = (updatedTask) => {
     dispatch(updateTask(updatedTask));
-    toast.info("Task Status Updated!");
+
+    socket.emit("updateTask", updatedTask);
   };
 
   const deleteTaskFromList = (taskId) => {
     dispatch(deleteTask(taskId));
-    toast.error("Task Deleted!");
+
+    socket.emit("deleteTask", taskId);
   };
 
   const openEditModal = (task) => {
@@ -73,7 +96,6 @@ function Main() {
       </div>
 
       <TaskList
-        tasks={tasks}
         onUpdateTask={openEditModal}
         onDeleteTask={deleteTaskFromList}
       />
@@ -85,6 +107,7 @@ function Main() {
         Add Task
       </button>
 
+      {/* Task Modal for Adding or Editing */}
       {isModalOpen && (
         <TaskModal
           task={currentTask}
@@ -94,7 +117,6 @@ function Main() {
           onClose={() => setIsModalOpen(false)}
         />
       )}
-
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar />
     </div>
   );

@@ -5,8 +5,12 @@ import {
   setFilter,
   deleteTask,
   updateTask,
-} from "../redux/slices/taskSlice";
+  addTask,
+} from "../redux/slices/taskSlice"; // Import addTask here
 import TaskModal from "./TaskModal";
+import io from "socket.io-client";
+
+const socket = io("http://localhost:3000");
 
 function TaskList() {
   const dispatch = useDispatch();
@@ -38,6 +42,26 @@ function TaskList() {
     const matchesFilter = filter === "All" || task.status === filter;
     return matchesSearch && matchesFilter;
   });
+
+  useEffect(() => {
+    socket.on("taskAdded", (task) => {
+      dispatch(addTask(task));
+    });
+
+    socket.on("taskUpdated", (updatedTask) => {
+      dispatch(updateTask(updatedTask));
+    });
+
+    socket.on("taskDeleted", (taskId) => {
+      dispatch(deleteTask(taskId));
+    });
+
+    return () => {
+      socket.off("taskAdded");
+      socket.off("taskUpdated");
+      socket.off("taskDeleted");
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     return () => {

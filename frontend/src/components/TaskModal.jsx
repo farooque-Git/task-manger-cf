@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addTask, updateTask } from "../redux/slices/taskSlice";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function TaskModal({ task, isEditing, onClose }) {
   const dispatch = useDispatch();
